@@ -7,18 +7,22 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
     "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
       "backgroundColor": "#0B0F17"
     },
     "android": {
       "package": "org.keralawaterways.thoninet",
       "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0B0F17"
       },
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
         "CAMERA",
-        "READ_EXTERNAL_STORAGE"
+        "READ_EXTERNAL_STORAGE",
+        "RECORD_AUDIO"
       ]
     },
     "plugins": [
@@ -32,6 +36,18 @@
         "expo-image-picker",
         {
           "photosPermission": "Allow ThoniNet to access photos to upload vessel inspection certificates."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow ThoniNet to access camera to scan and verify physical KIV boat QR codes."
+        }
+      ],
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow ThoniNet to access microphone to process Malayalam Sarvam AI voice commands."
         }
       ]
     ],
