@@ -5,6 +5,11 @@
 
 ---
 
+## ?? Direct APK Download Link
+
+**Download & Install on Android:** [Download ThoniNet.apk v1.0.0](https://github.com/karthikeyantoff/ThoniNet-/releases/download/v1.0.0/ThoniNet.apk)
+
+---\n
 ## 1. Executive Summary
 
 Alappuzha is globally renowned for its 1,100 $km^2$ of backwaters, 1,200+ commercial houseboats and shikaras, and the State Water Transport Department (SWTD) ferry network that serves as the lifeblood for 50,000+ island residents. 
