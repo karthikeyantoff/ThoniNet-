@@ -24,15 +24,15 @@ import {
 } from 'react-native';
 import * as Location from 'expo-location';
 import * as ImagePicker from 'expo-image-picker';
-import { Feather } from '@expo/vector-icons';
+
 
 // Production Real Hardware & Innovative Services
-import SarvamAudioService from './src/services/SarvamAudioService';
-import RealQrCameraScanner from './src/components/RealQrCameraScanner';
-import PolderGeofenceService, { HERITAGE_POLDERS } from './src/services/PolderGeofenceService';
-import HydroSonarService, { CANAL_WATER_SEGMENTS } from './src/services/HydroSonarService';
-import CanalHazardService, { HAZARD_TYPES } from './src/services/CanalHazardService';
-import MeshSosService from './src/services/MeshSosService';
+
+
+
+
+
+
 
 const JETTIES = [
   { id: "ALP", name: "Alappuzha Main SWTD Terminal", nameMl: "ആലപ്പുഴ മെയിൻ ടെർമിനൽ", lat: 9.5008, lng: 76.3453 },
@@ -331,7 +331,7 @@ export default function App() {
         <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
         <View style={styles.splashBrandContainer}>
           <View style={styles.splashLogoMark}>
-            <Feather name="anchor" size={32} color="#0D9488" />
+            <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
           </View>
           <Text style={styles.splashTitle}>ThoniNet</Text>
           <Text style={styles.splashSubtitle}>തോണി-നെറ്റ് • Kerala Inland Waterways</Text>
@@ -349,7 +349,7 @@ export default function App() {
       <View style={styles.topAppBar}>
         <View style={styles.brandRow}>
           <View style={styles.appIconBadge}>
-            <Feather name="navigation" size={16} color="#0D9488" />
+            <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
           </View>
           <View>
             <Text style={styles.appTitle}>ThoniNet</Text>
@@ -363,7 +363,7 @@ export default function App() {
             onPress={() => setIsQrScannerOpen(true)}
             activeOpacity={0.7}
           >
-            <Feather name="maximize" size={16} color="#0F172A" />
+            <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
             <Text style={styles.qrBtnText}>Scan</Text>
           </TouchableOpacity>
 
@@ -372,7 +372,7 @@ export default function App() {
             onPress={() => setShowAuthModal(true)}
             activeOpacity={0.7}
           >
-            <Feather name="user" size={16} color="#475569" />
+            <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
           </TouchableOpacity>
         </View>
       </View>
@@ -385,7 +385,7 @@ export default function App() {
             onPress={() => setActiveTab('transit')}
             activeOpacity={0.75}
           >
-            <Feather name="navigation" size={13} color={activeTab === 'transit' ? '#0D9488' : '#64748B'} style={{ marginRight: 6 }} />
+            <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
             <Text style={[styles.subAppPillText, activeTab === 'transit' && styles.subAppPillTextActive]}>Transit</Text>
           </TouchableOpacity>
 
@@ -394,7 +394,7 @@ export default function App() {
             onPress={() => setActiveTab('sonar')}
             activeOpacity={0.75}
           >
-            <Feather name="activity" size={13} color={activeTab === 'sonar' ? '#0D9488' : '#64748B'} style={{ marginRight: 6 }} />
+            <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
             <Text style={[styles.subAppPillText, activeTab === 'sonar' && styles.subAppPillTextActive]}>Canal Sonar</Text>
           </TouchableOpacity>
 
@@ -403,7 +403,7 @@ export default function App() {
             onPress={() => setActiveTab('hazards')}
             activeOpacity={0.75}
           >
-            <Feather name="alert-triangle" size={13} color={activeTab === 'hazards' ? '#0D9488' : '#64748B'} style={{ marginRight: 6 }} />
+            <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
             <Text style={[styles.subAppPillText, activeTab === 'hazards' && styles.subAppPillTextActive]}>Weed & Debris</Text>
           </TouchableOpacity>
 
@@ -412,7 +412,7 @@ export default function App() {
             onPress={() => setActiveTab('owner')}
             activeOpacity={0.75}
           >
-            <Feather name="shield" size={13} color={activeTab === 'owner' ? '#0D9488' : '#64748B'} style={{ marginRight: 6 }} />
+            <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
             <Text style={[styles.subAppPillText, activeTab === 'owner' && styles.subAppPillTextActive]}>Operator</Text>
           </TouchableOpacity>
 
@@ -421,7 +421,7 @@ export default function App() {
             onPress={() => setActiveTab('voice')}
             activeOpacity={0.75}
           >
-            <Feather name="mic" size={13} color={activeTab === 'voice' ? '#0D9488' : '#64748B'} style={{ marginRight: 6 }} />
+            <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
             <Text style={[styles.subAppPillText, activeTab === 'voice' && styles.subAppPillTextActive]}>Sarvam Voice</Text>
           </TouchableOpacity>
 
@@ -430,7 +430,7 @@ export default function App() {
             onPress={() => setActiveTab('jetties')}
             activeOpacity={0.75}
           >
-            <Feather name="list" size={13} color={activeTab === 'jetties' ? '#0D9488' : '#64748B'} style={{ marginRight: 6 }} />
+            <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
             <Text style={[styles.subAppPillText, activeTab === 'jetties' && styles.subAppPillTextActive]}>Directory</Text>
           </TouchableOpacity>
         </ScrollView>
@@ -446,7 +446,7 @@ export default function App() {
         {activeHeritagePolder && (
           <View style={styles.geofenceAlertCard}>
             <View style={styles.geofenceIconBox}>
-              <Feather name="compass" size={18} color="#0F766E" />
+              <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
             </View>
             <View style={{ flex: 1 }}>
               <View style={styles.geofenceTitleRow}>
@@ -465,7 +465,7 @@ export default function App() {
             <View style={styles.card}>
               <View style={styles.cardHeaderRow}>
                 <View style={styles.cardHeaderTitleRow}>
-                  <Feather name="map-pin" size={16} color="#0D9488" style={{ marginRight: 8 }} />
+                  <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                   <Text style={styles.cardLabel}>Real Hardware GNSS Lock</Text>
                 </View>
                 <View style={styles.liveIndicatorBadge}>
@@ -502,7 +502,7 @@ export default function App() {
                 onPress={() => setIsQrScannerOpen(true)}
                 activeOpacity={0.85}
               >
-                <Feather name="camera" size={16} color="#FFFFFF" style={{ marginRight: 8 }} />
+                <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                 <Text style={styles.primaryActionText}>Verify Vessel QR</Text>
               </TouchableOpacity>
 
@@ -511,7 +511,7 @@ export default function App() {
                 onPress={() => setActiveTab('voice')}
                 activeOpacity={0.85}
               >
-                <Feather name="mic" size={16} color="#0F172A" style={{ marginRight: 8 }} />
+                <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                 <Text style={styles.secondaryActionText}>Ask in Malayalam</Text>
               </TouchableOpacity>
             </View>
@@ -520,7 +520,7 @@ export default function App() {
             <View style={styles.card}>
               <View style={styles.cardHeaderRow}>
                 <View style={styles.cardHeaderTitleRow}>
-                  <Feather name="headphones" size={16} color="#0D9488" style={{ marginRight: 8 }} />
+                  <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                   <Text style={styles.cardLabel}>Geofenced Audio Polder Stories</Text>
                 </View>
                 <Text style={styles.captionBadge}>Sarvam Voice</Text>
@@ -538,13 +538,13 @@ export default function App() {
                     activeOpacity={0.7}
                   >
                     <View style={styles.polderIcon}>
-                      <Feather name="volume-2" size={14} color="#0D9488" />
+                      <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                     </View>
                     <View style={{ flex: 1 }}>
                       <Text style={styles.polderName}>{p.name}</Text>
                       <Text style={styles.polderSub}>{p.nameMl} • {p.elevation}</Text>
                     </View>
-                    <Feather name="play" size={14} color="#64748B" />
+                    <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                   </TouchableOpacity>
                 ))}
               </View>
@@ -554,7 +554,7 @@ export default function App() {
             <View style={styles.card}>
               <View style={styles.cardHeaderRow}>
                 <View style={styles.cardHeaderTitleRow}>
-                  <Feather name="git-commit" size={16} color="#0F172A" style={{ marginRight: 8 }} />
+                  <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                   <Text style={styles.cardLabel}>Alappuzha - Kottayam Corridor</Text>
                 </View>
                 <Text style={styles.captionBadge}>SWTD Route 1</Text>
@@ -603,7 +603,7 @@ export default function App() {
             <View style={styles.card}>
               <View style={styles.cardHeaderRow}>
                 <View style={styles.cardHeaderTitleRow}>
-                  <Feather name="activity" size={16} color="#0D9488" style={{ marginRight: 8 }} />
+                  <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                   <Text style={styles.cardLabel}>Acoustic Canal Clearance Gauge</Text>
                 </View>
                 <View style={styles.liveIndicatorBadge}>
@@ -656,7 +656,7 @@ export default function App() {
                         Base Depth: {seg.baseDraft}m • Bridge: {seg.bridgeClearance}m • Silt Risk: {seg.siltRisk}
                       </Text>
                     </View>
-                    {isSelected && <Feather name="check-circle" size={16} color="#0D9488" />}
+                    {isSelected && <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />}
                   </TouchableOpacity>
                 );
               })}
@@ -670,7 +670,7 @@ export default function App() {
             <View style={styles.card}>
               <View style={styles.cardHeaderRow}>
                 <View style={styles.cardHeaderTitleRow}>
-                  <Feather name="alert-triangle" size={16} color="#DC2626" style={{ marginRight: 8 }} />
+                  <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                   <Text style={styles.cardLabel}>Canal Obstructions & Hyacinth</Text>
                 </View>
                 <TouchableOpacity
@@ -678,7 +678,7 @@ export default function App() {
                   onPress={() => setShowReportHazardModal(true)}
                   activeOpacity={0.8}
                 >
-                  <Feather name="plus" size={12} color="#FFFFFF" style={{ marginRight: 4 }} />
+                  <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                   <Text style={styles.reportHazardBtnText}>Report</Text>
                 </TouchableOpacity>
               </View>
@@ -692,7 +692,7 @@ export default function App() {
                   <View key={haz.id} style={styles.hazardCardItem}>
                     <View style={styles.hazardHeader}>
                       <View style={styles.hazardTagBox}>
-                        <Feather name="alert-circle" size={14} color="#DC2626" style={{ marginRight: 6 }} />
+                        <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                         <Text style={styles.hazardTagText}>{haz.title}</Text>
                       </View>
                       <Text style={styles.hazardTime}>{haz.reportedAt}</Text>
@@ -702,7 +702,7 @@ export default function App() {
                     <Text style={styles.hazardReach}>Location: {haz.canalReach}</Text>
 
                     <View style={styles.hazardActionBox}>
-                      <Feather name="navigation" size={12} color="#0D9488" style={{ marginRight: 6 }} />
+                      <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                       <Text style={styles.hazardActionText}>{haz.recommendedAction}</Text>
                     </View>
                   </View>
@@ -721,12 +721,7 @@ export default function App() {
                 onPress={() => setOwnerView('cockpit')}
                 activeOpacity={0.8}
               >
-                <Feather
-                  name="activity"
-                  size={14}
-                  color={ownerView === 'cockpit' ? '#0F172A' : '#64748B'}
-                  style={{ marginRight: 6 }}
-                />
+                <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                 <Text style={[styles.segmentText, ownerView === 'cockpit' && styles.segmentTextActive]}>
                   Operator Cockpit
                 </Text>
@@ -737,12 +732,7 @@ export default function App() {
                 onPress={() => setOwnerView('register')}
                 activeOpacity={0.8}
               >
-                <Feather
-                  name="file-text"
-                  size={14}
-                  color={ownerView === 'register' ? '#0F172A' : '#64748B'}
-                  style={{ marginRight: 6 }}
-                />
+                <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                 <Text style={[styles.segmentText, ownerView === 'register' && styles.segmentTextActive]}>
                   KIV Registration
                 </Text>
@@ -753,7 +743,7 @@ export default function App() {
               <View style={styles.card}>
                 <View style={styles.cardHeaderRow}>
                   <View style={styles.cardHeaderTitleRow}>
-                    <Feather name="shield" size={16} color="#0D9488" style={{ marginRight: 8 }} />
+                    <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                     <Text style={styles.cardLabel}>Statutory KIV Registration</Text>
                   </View>
                   <Text style={styles.captionBadge}>Kerala Maritime Board</Text>
@@ -838,7 +828,7 @@ export default function App() {
                       <Image source={{ uri: documentImage }} style={styles.attachedThumbnail} />
                     ) : (
                       <View style={styles.photoUploadPlaceholder}>
-                        <Feather name="upload" size={20} color="#64748B" style={{ marginBottom: 6 }} />
+                        <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                         <Text style={styles.uploadBoxText}>Attach Physical Certificate Photo</Text>
                         <Text style={styles.uploadBoxSub}>Supports JPG / PNG up to 10MB</Text>
                       </View>
@@ -851,7 +841,7 @@ export default function App() {
                   onPress={handleRegisterVessel}
                   activeOpacity={0.85}
                 >
-                  <Feather name="check" size={16} color="#FFFFFF" style={{ marginRight: 8 }} />
+                  <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                   <Text style={styles.submitFormButtonText}>Register Vessel on Waterways</Text>
                 </TouchableOpacity>
               </View>
@@ -861,7 +851,7 @@ export default function App() {
                 <View style={styles.card}>
                   <View style={styles.cardHeaderRow}>
                     <View style={styles.cardHeaderTitleRow}>
-                      <Feather name="navigation-2" size={16} color="#0D9488" style={{ marginRight: 8 }} />
+                      <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                       <Text style={styles.cardLabel}>Active Vessel</Text>
                     </View>
                     <View style={[styles.statusTag, isOnDuty ? styles.statusTagDuty : styles.statusTagMoored]}>
@@ -884,12 +874,7 @@ export default function App() {
                       onPress={() => setIsOnDuty(!isOnDuty)}
                       activeOpacity={0.85}
                     >
-                      <Feather
-                        name={isOnDuty ? "anchor" : "play"}
-                        size={14}
-                        color={isOnDuty ? "#0F766E" : "#475569"}
-                        style={{ marginRight: 6 }}
-                      />
+                      <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                       <Text style={[styles.dutyToggleText, isOnDuty ? styles.dutyToggleTextActive : styles.dutyToggleTextInactive]}>
                         {isOnDuty ? "Set Moored (Off Duty)" : "Set On Duty (Broadcast)"}
                       </Text>
@@ -901,7 +886,7 @@ export default function App() {
                 <View style={styles.card}>
                   <View style={styles.cardHeaderRow}>
                     <View style={styles.cardHeaderTitleRow}>
-                      <Feather name="users" size={16} color="#0F172A" style={{ marginRight: 8 }} />
+                      <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                       <Text style={styles.cardLabel}>Passenger Manifest Counter</Text>
                     </View>
                     <Text style={styles.captionBadge}>Capacity: 12</Text>
@@ -913,7 +898,7 @@ export default function App() {
                       onPress={() => setActivePassengers(Math.max(0, activePassengers - 1))}
                       activeOpacity={0.7}
                     >
-                      <Feather name="minus" size={20} color="#0F172A" />
+                      <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                     </TouchableOpacity>
 
                     <View style={styles.manifestDisplay}>
@@ -926,7 +911,7 @@ export default function App() {
                       onPress={() => setActivePassengers(Math.min(14, activePassengers + 1))}
                       activeOpacity={0.7}
                     >
-                      <Feather name="plus" size={20} color="#0F172A" />
+                      <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                     </TouchableOpacity>
                   </View>
 
@@ -939,7 +924,7 @@ export default function App() {
                     style={styles.thermalPrintBtn}
                     activeOpacity={0.8}
                   >
-                    <Feather name="printer" size={14} color="#0F172A" style={{ marginRight: 6 }} />
+                    <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                     <Text style={styles.thermalPrintBtnText}>Print Statutory Bluetooth Manifest (ESC/POS)</Text>
                   </TouchableOpacity>
                 </View>
@@ -951,7 +936,7 @@ export default function App() {
                   activeOpacity={0.85}
                 >
                   <View style={styles.distressIconCircle}>
-                    <Feather name="alert-triangle" size={20} color="#DC2626" />
+                    <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                   </View>
                   <View style={styles.distressTextCol}>
                     <Text style={styles.distressTitle}>Maritime Distress Mayday</Text>
@@ -959,12 +944,12 @@ export default function App() {
                       Broadcasts via Cellular + Ultrasonic & BLE Mesh Relay (0 Cell Bars Support)
                     </Text>
                   </View>
-                  <Feather name="chevron-right" size={18} color="#DC2626" />
+                  <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                 </TouchableOpacity>
 
                 {meshBroadcastStatus && (
                   <View style={styles.meshStatusBox}>
-                    <Feather name="radio" size={14} color="#0D9488" style={{ marginRight: 6 }} />
+                    <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                     <Text style={styles.meshStatusText}>
                       Mesh Relay Active: {meshBroadcastStatus.beaconId} (18kHz acoustic chirp + BLE advertising)
                     </Text>
@@ -980,7 +965,7 @@ export default function App() {
             <View style={styles.card}>
               <View style={styles.cardHeaderRow}>
                 <View style={styles.cardHeaderTitleRow}>
-                  <Feather name="mic" size={16} color="#0D9488" style={{ marginRight: 8 }} />
+                  <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                   <Text style={styles.cardLabel}>Sarvam AI Malayalam Engine</Text>
                 </View>
                 <Text style={styles.captionBadge}>Saaras STT • Bulbul v3 TTS</Text>
@@ -1003,12 +988,7 @@ export default function App() {
                 onPress={handleToggleVoiceRecording}
                 activeOpacity={0.85}
               >
-                <Feather
-                  name={isAudioRecording ? "square" : "mic"}
-                  size={18}
-                  color="#FFFFFF"
-                  style={{ marginRight: 8 }}
-                />
+                <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                 <Text style={styles.voiceRecordBtnText}>
                   {isAudioRecording ? "Stop & Transcribe Voice" : "Record Malayalam Voice"}
                 </Text>
@@ -1029,7 +1009,7 @@ export default function App() {
                 onPress={() => processSarvamVoiceQuery("ആലപ്പുഴയിൽ നിന്ന് കോട്ടയത്തേക്കുള്ള ബോട്ട് എപ്പോഴാണ്?")}
                 activeOpacity={0.7}
               >
-                <Feather name="message-square" size={14} color="#64748B" style={{ marginRight: 8 }} />
+                <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                 <Text style={styles.promptChipText}>"ആലപ്പുഴയിൽ നിന്ന് കോട്ടയത്തേക്കുള്ള ബോട്ട് എപ്പോഴാണ്?"</Text>
               </TouchableOpacity>
 
@@ -1038,7 +1018,7 @@ export default function App() {
                 onPress={() => processSarvamVoiceQuery("ഈ ബോട്ടിൽ ലൈഫ് ജാക്കറ്റ് ഉണ്ടോ?")}
                 activeOpacity={0.7}
               >
-                <Feather name="message-square" size={14} color="#64748B" style={{ marginRight: 8 }} />
+                <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                 <Text style={styles.promptChipText}>"ഈ ബോട്ടിൽ ലൈഫ് ജാക്കറ്റ് ഉണ്ടോ?"</Text>
               </TouchableOpacity>
 
@@ -1047,7 +1027,7 @@ export default function App() {
                 onPress={() => processSarvamVoiceQuery("കുപ്പപ്പുറം വഴി പായൽ തടസ്സമുണ്ടോ?")}
                 activeOpacity={0.7}
               >
-                <Feather name="message-square" size={14} color="#64748B" style={{ marginRight: 8 }} />
+                <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                 <Text style={styles.promptChipText}>"കുപ്പപ്പുറം വഴി പായൽ തടസ്സമുണ്ടോ?"</Text>
               </TouchableOpacity>
             </View>
@@ -1059,7 +1039,7 @@ export default function App() {
             <View style={styles.card}>
               <View style={styles.cardHeaderRow}>
                 <View style={styles.cardHeaderTitleRow}>
-                  <Feather name="anchor" size={16} color="#0D9488" style={{ marginRight: 8 }} />
+                  <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                   <Text style={styles.cardLabel}>SWTD Jetty Directory</Text>
                 </View>
                 <Text style={styles.captionBadge}>7 Major Terminals</Text>
@@ -1068,7 +1048,7 @@ export default function App() {
               {JETTIES.map((j) => (
                 <View key={j.id} style={styles.jettyListRow}>
                   <View style={styles.jettyListIconBadge}>
-                    <Feather name="map-pin" size={14} color="#0F766E" />
+                    <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                   </View>
                   <View style={styles.jettyListInfoCol}>
                     <Text style={styles.jettyListNameEn}>{j.name}</Text>
@@ -1092,11 +1072,7 @@ export default function App() {
           onPress={() => setActiveTab('transit')}
           activeOpacity={0.7}
         >
-          <Feather
-            name="navigation"
-            size={18}
-            color={activeTab === 'transit' ? '#0D9488' : '#94A3B8'}
-          />
+          <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
           <Text style={[styles.tabLabel, activeTab === 'transit' && styles.tabLabelActive]}>
             Transit
           </Text>
@@ -1107,11 +1083,7 @@ export default function App() {
           onPress={() => setActiveTab('sonar')}
           activeOpacity={0.7}
         >
-          <Feather
-            name="activity"
-            size={18}
-            color={activeTab === 'sonar' ? '#0D9488' : '#94A3B8'}
-          />
+          <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
           <Text style={[styles.tabLabel, activeTab === 'sonar' && styles.tabLabelActive]}>
             Sonar
           </Text>
@@ -1122,11 +1094,7 @@ export default function App() {
           onPress={() => setActiveTab('hazards')}
           activeOpacity={0.7}
         >
-          <Feather
-            name="alert-triangle"
-            size={18}
-            color={activeTab === 'hazards' ? '#0D9488' : '#94A3B8'}
-          />
+          <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
           <Text style={[styles.tabLabel, activeTab === 'hazards' && styles.tabLabelActive]}>
             Hazards
           </Text>
@@ -1137,11 +1105,7 @@ export default function App() {
           onPress={() => setActiveTab('owner')}
           activeOpacity={0.7}
         >
-          <Feather
-            name="shield"
-            size={18}
-            color={activeTab === 'owner' ? '#0D9488' : '#94A3B8'}
-          />
+          <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
           <Text style={[styles.tabLabel, activeTab === 'owner' && styles.tabLabelActive]}>
             Operator
           </Text>
@@ -1152,11 +1116,7 @@ export default function App() {
           onPress={() => setActiveTab('voice')}
           activeOpacity={0.7}
         >
-          <Feather
-            name="mic"
-            size={18}
-            color={activeTab === 'voice' ? '#0D9488' : '#94A3B8'}
-          />
+          <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
           <Text style={[styles.tabLabel, activeTab === 'voice' && styles.tabLabelActive]}>
             Voice AI
           </Text>
@@ -1177,11 +1137,11 @@ export default function App() {
             <View style={styles.modalCard}>
               <View style={styles.modalHeaderRow}>
                 <View style={styles.modalStatusBadge}>
-                  <Feather name="check-circle" size={14} color="#0D9488" style={{ marginRight: 6 }} />
+                  <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                   <Text style={styles.modalStatusText}>Statutory KIV Verified</Text>
                 </View>
                 <TouchableOpacity onPress={() => setScannedVesselInfo(null)} style={{ padding: 4 }}>
-                  <Feather name="x" size={18} color="#64748B" />
+                  <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
                 </TouchableOpacity>
               </View>
 
@@ -1224,7 +1184,7 @@ export default function App() {
             <View style={styles.modalHeaderRow}>
               <Text style={styles.modalVesselName}>Report Canal Obstruction</Text>
               <TouchableOpacity onPress={() => setShowReportHazardModal(false)} style={{ padding: 4 }}>
-                <Feather name="x" size={18} color="#64748B" />
+                <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
               </TouchableOpacity>
             </View>
 
@@ -1267,7 +1227,7 @@ export default function App() {
               onPress={handleReportHazardSubmit}
               activeOpacity={0.85}
             >
-              <Feather name="radio" size={16} color="#FFFFFF" style={{ marginRight: 8 }} />
+              <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
               <Text style={styles.submitFormButtonText}>Broadcast Obstruction</Text>
             </TouchableOpacity>
           </View>
@@ -1281,7 +1241,7 @@ export default function App() {
             <View style={styles.modalHeaderRow}>
               <Text style={styles.modalVesselName}>Passenger Profile</Text>
               <TouchableOpacity onPress={() => setShowAuthModal(false)} style={{ padding: 4 }}>
-                <Feather name="x" size={18} color="#64748B" />
+                <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
               </TouchableOpacity>
             </View>
 
@@ -1292,7 +1252,7 @@ export default function App() {
             <View style={styles.modalDivider} />
 
             <View style={styles.profileMetaRow}>
-              <Feather name="shield" size={14} color="#0D9488" style={{ marginRight: 8 }} />
+              <View style={{width: 6, height: 6, borderRadius: 3, backgroundColor: "#0D9488", marginHorizontal: 4}} />
               <Text style={styles.profileMetaText}>Kerala Maritime Board Verified Client</Text>
             </View>
 
