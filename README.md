@@ -7,7 +7,7 @@
 
 ## ?? Direct APK Download Link
 
-**Download & Install on Android:** [Download ThoniNet.apk v1.0.0](https://github.com/karthikeyantoff/ThoniNet-/releases/download/v1.0.0/ThoniNet.apk)
+**Download & Install on Android:** [Download ThoniNet.apk v1.0.0](https://github.com/karthikeyantoff/ThoniNet-/releases/download/v2.1.0/ThoniNet.apk)
 
 ---\n
 ## 1. Executive Summary
