@@ -4,6 +4,11 @@
     "slug": "thoninet",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#0B0F17"
+    },
     "android": {
       "package": "org.keralawaterways.thoninet",
       "adaptiveIcon": {
@@ -16,6 +21,20 @@
         "READ_EXTERNAL_STORAGE"
       ]
     },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow ThoniNet to access your location to calculate distance to nearest SWTD jetties."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow ThoniNet to access photos to upload vessel inspection certificates."
+        }
+      ]
+    ],
     "extra": {
       "eas": {
         "projectId": "2a19dda7-5c2c-4a55-9b6a-36609614310f"
