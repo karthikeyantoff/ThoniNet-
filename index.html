@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ThoniNet | Kerala Inland Waterways Safety & Transit Network</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+    :root {
+      --bg: #0B0F17;
+      --surface: #131926;
+      --border: #1E293B;
+      --accent: #0D9488;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      letter-spacing: -0.011em;
+    }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .nav-btn.active {
+      background-color: #0F172A;
+      color: #38BDF8;
+      border-color: #0284C7;
+    }
+    /* Hardware accelerated smooth tap */
+    button {
+      touch-action: manipulation;
+    }
+    button:active {
+      transform: scale(0.985);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased select-none pb-20 md:pb-0">
+
+  <!-- Top Navigation Bar -->
+  <header class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur sticky top-0 z-40 px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 rounded-lg bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      </div>
+      <div>
+        <div class="text-sm font-semibold tracking-tight text-white flex items-center gap-2">
+          THONINET
+          <span class="text-[10px] tracking-widest font-mono uppercase bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded border border-slate-700">KIV-SWTD</span>
+        </div>
+        <p class="text-[11px] text-slate-400">Inland Waterways Portal • Alappuzha Sector</p>
+      </div>
+    </div>
+
+    <!-- Mode Selector: Public vs Boat Owner Portal -->
+    <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 p-1 rounded-lg">
+      <button onclick="switchView('public')" id="btn-public" class="nav-btn active px-3 py-1.5 rounded-md text-xs font-medium transition flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        Public Transit
+      </button>
+      <button onclick="switchView('owner')" id="btn-owner" class="nav-btn px-3 py-1.5 rounded-md text-xs font-medium text-slate-400 hover:text-white transition flex items-center gap-1.5 border border-transparent">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        Boat Owner Portal
+      </button>
+    </div>
+  </header>
+
+  <!-- GPS Status Banner -->
+  <div class="bg-slate-900/50 border-b border-slate-800/60 px-4 py-2 flex items-center justify-between text-[11px] font-mono">
+    <div class="flex items-center gap-2">
+      <span id="gps-dot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+      <span id="gps-text" class="text-slate-300">Acquiring Hardware GPS Coordinates...</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="text-slate-500">Nearest Hub:</span>
+      <span id="nearest-jetty" class="text-teal-400 font-semibold">Calculating...</span>
+    </div>
+  </div>
+
+  <!-- CONTAINER 1: PUBLIC TRANSIT & WATERWAY RADAR -->
+  <main id="view-public" class="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-6">
+
+    <!-- Active Service Live Tracker Card -->
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <span class="text-[11px] font-mono text-teal-400 uppercase tracking-wider block">Service SWTD-01 • Vembanad Express</span>
+          <h2 class="text-base font-bold text-white tracking-tight">Alappuzha Main ➔ Kottayam Kodimatha Terminal</h2>
+        </div>
+        <div class="text-right">
+          <span class="text-xs font-mono bg-teal-500/10 text-teal-400 border border-teal-500/20 px-2 py-0.5 rounded font-medium">ON SCHEDULE</span>
+          <span class="text-[10px] text-slate-400 block mt-0.5">Speed: 6.4 Knots</span>
+        </div>
+      </div>
+
+      <!-- ETA Display -->
+      <div class="flex items-baseline gap-3 my-4">
+        <span class="text-4xl font-extrabold text-amber-400 tracking-tight font-mono">06</span>
+        <div>
+          <span class="text-xs text-slate-400 uppercase font-medium tracking-wider block">Minutes to Next Jetty</span>
+          <span class="text-sm text-slate-200 font-semibold">Approaching: Kainakary Chira Station</span>
+        </div>
+      </div>
+
+      <!-- Vertical Canal Stepper -->
+      <div class="border-t border-slate-800/80 pt-4 space-y-4 text-xs">
+        <div class="flex items-center gap-3 text-slate-400">
+          <div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div>
+          <span class="w-16 font-mono text-slate-500">09:30 AM</span>
+          <span class="flex-1">Alappuzha Main SWTD Terminal</span>
+          <span class="font-mono text-slate-500">Departed</span>
+        </div>
+        <div class="flex items-center gap-3 text-slate-400">
+          <div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div>
+          <span class="w-16 font-mono text-slate-500">09:55 AM</span>
+          <span class="flex-1">Kuppapuram Waypoint</span>
+          <span class="font-mono text-slate-500">Cleared</span>
+        </div>
+        <div class="flex items-center gap-3 text-white font-medium bg-slate-800/40 p-2 rounded-lg border border-slate-700/50">
+          <div class="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse"></div>
+          <span class="w-16 font-mono text-teal-400">10:14 AM</span>
+          <span class="flex-1 text-teal-200 font-semibold">Kainakary Chira Station (In Progress)</span>
+          <span class="font-mono text-amber-400 font-semibold">ETA 6 min</span>
+        </div>
+        <div class="flex items-center gap-3 text-slate-500">
+          <div class="w-2.5 h-2.5 rounded-full border border-slate-700"></div>
+          <span class="w-16 font-mono">10:35 AM</span>
+          <span class="flex-1">Pulinkunnu Central Terminal</span>
+          <span class="font-mono">Scheduled</span>
+        </div>
+        <div class="flex items-center gap-3 text-slate-500">
+          <div class="w-2.5 h-2.5 rounded-full border border-slate-700"></div>
+          <span class="w-16 font-mono">11:45 AM</span>
+          <span class="flex-1">Kottayam Kodimatha Commercial Dock</span>
+          <span class="font-mono">Terminus</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Waterways Vector Map -->
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col gap-3">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Sector Waterway Geo-Grid</h3>
+        <span class="text-[11px] font-mono text-slate-400">NW-3 / NW-9 Corridors</span>
+      </div>
+      <div id="map" class="w-full h-72 rounded-lg border border-slate-800 overflow-hidden"></div>
+    </div>
+
+    <!-- Public Safety QR Code Verification Box -->
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col gap-3">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-sm font-semibold text-white">Vessel Safety Verification</h3>
+          <p class="text-xs text-slate-400 mt-0.5">Verify license, Syrang clearance, and passenger limits before boarding any boat.</p>
+        </div>
+        <button onclick="simulateScan()" class="bg-teal-600 hover:bg-teal-500 text-white text-xs font-medium px-3 py-2 rounded-lg transition flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+          Scan Vessel QR
+        </button>
+      </div>
+
+      <!-- Verification Result Display -->
+      <div id="scan-result" class="hidden bg-slate-950 border border-teal-500/40 rounded-lg p-4 space-y-2 text-xs">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <span class="font-bold text-white text-sm">KIV/ALP/HB/0842/2024</span>
+          <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded font-semibold text-[10px]">CERTIFIED VALID</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-slate-300 pt-1">
+          <div><span class="text-slate-500 block text-[10px]">Vessel Name</span> Royal Vembanad II</div>
+          <div><span class="text-slate-500 block text-[10px]">Classification</span> Commercial Houseboat</div>
+          <div><span class="text-slate-500 block text-[10px]">Certified Capacity</span> Max 18 Passengers</div>
+          <div><span class="text-slate-500 block text-[10px]">Life Saving Gear</span> 22 Certified Jackets</div>
+          <div><span class="text-slate-500 block text-[10px]">Master Syrang</span> S. Radhakrishnan (Lic #4412)</div>
+          <div><span class="text-slate-500 block text-[10px]">PCB Bio-Tank</span> Clearance Valid (Oct 2027)</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- CONTAINER 2: DEDICATED BOAT OWNER & REGISTRATION PORTAL -->
+  <main id="view-owner" class="hidden flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-6">
+
+    <!-- Owner Portal Header -->
+    <div class="border-b border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <h2 class="text-lg font-bold text-white tracking-tight">Kerala Inland Vessel (KIV) Portal</h2>
+        <p class="text-xs text-slate-400">Port of Alappuzha • Official Operator Registration & Duty Dispatch</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="setOwnerTab('register')" id="tab-register-btn" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-teal-600 text-white transition">Register Vessel</button>
+        <button onclick="setOwnerTab('dashboard')" id="tab-dash-btn" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition">Owner Cockpit</button>
+      </div>
+    </div>
+
+    <!-- REGISTRATION FORM -->
+    <div id="owner-register-section" class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm space-y-5">
+      <div class="border-b border-slate-800 pb-3">
+        <h3 class="text-sm font-semibold text-white">Statutory Vessel Registration Form</h3>
+        <p class="text-xs text-slate-400 mt-0.5">Submit technical specifications, environmental compliance, and regulatory credentials.</p>
+      </div>
+
+      <form id="vessel-form" onsubmit="handleRegistration(event)" class="space-y-4 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-slate-400 mb-1 font-medium">KIV Official Registration Number</label>
+            <input required type="text" placeholder="e.g. KIV/ALP/SH/1029/2026" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-teal-500 font-mono">
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1 font-medium">Vessel Name</label>
+            <input required type="text" placeholder="e.g. Kainakary Shikara 01" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-teal-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-slate-400 mb-1 font-medium">Vessel Type</label>
+            <select class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-teal-500">
+              <option value="shikara">Motorized Shikara</option>
+              <option value="houseboat">Houseboat (Single/Double)</option>
+              <option value="swtd">Public Passenger Ferry</option>
+              <option value="speedboat">Speedboat / Water Taxi</option>
+              <option value="canoe">Traditional Country Craft (Vallam)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1 font-medium">Certified Max Passenger Capacity</label>
+            <input required type="number" min="1" max="100" placeholder="e.g. 12" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-teal-500 font-mono">
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1 font-medium">Life Jackets Onboard Count</label>
+            <input required type="number" min="1" max="100" placeholder="e.g. 15" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-teal-500 font-mono">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-slate-400 mb-1 font-medium">Syrang (Driver) License Number</label>
+            <input required type="text" placeholder="e.g. SYR-KIV-8902" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-teal-500 font-mono">
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1 font-medium">Pollution Control Board Bio-Tank Ref</label>
+            <input required type="text" placeholder="e.g. PCB/ALP/BT-2025-99" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white placeholder-slate-600 focus:outline-none focus:border-teal-500 font-mono">
+          </div>
+        </div>
+
+        <!-- Real Image File Upload -->
+        <div>
+          <label class="block text-slate-400 mb-1 font-medium">Upload Vessel Inspection Photo / Document</label>
+          <div class="border border-dashed border-slate-800 rounded-lg p-4 bg-slate-950/60 flex flex-col items-center justify-center gap-2">
+            <input type="file" id="vessel-image" accept="image/*" onchange="previewImage(event)" class="text-xs text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700">
+            <div id="image-preview" class="hidden mt-2 w-full max-w-xs h-32 rounded-lg border border-slate-800 overflow-hidden bg-slate-900">
+              <img id="preview-img" src="" alt="Vessel Preview" class="w-full h-full object-cover">
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-2.5 rounded-lg transition text-xs tracking-wide">
+            SUBMIT STATUTORY REGISTRATION & GENERATE BEACON
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- OWNER COCKPIT (AFTER REGISTRATION) -->
+    <div id="owner-dash-section" class="hidden space-y-5">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+          <span class="text-[11px] font-mono text-slate-400 block mb-1">OPERATIONAL STATUS</span>
+          <div class="flex items-center gap-2 mt-1">
+            <button onclick="toggleDuty(true)" id="duty-on" class="px-3 py-1 rounded bg-teal-600 text-white text-xs font-semibold">ON DUTY</button>
+            <button onclick="toggleDuty(false)" id="duty-off" class="px-3 py-1 rounded bg-slate-800 text-slate-400 text-xs font-medium">MOORED</button>
+          </div>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+          <span class="text-[11px] font-mono text-slate-400 block mb-1">ACTIVE PASSENGERS ONBOARD</span>
+          <div class="flex items-center gap-3 mt-1">
+            <button onclick="adjustPassengers(-1)" class="w-7 h-7 rounded bg-slate-800 text-white font-bold flex items-center justify-center">-</button>
+            <span id="passenger-count" class="text-xl font-bold font-mono text-white">08</span>
+            <button onclick="adjustPassengers(1)" class="w-7 h-7 rounded bg-slate-800 text-white font-bold flex items-center justify-center">+</button>
+            <span class="text-[10px] text-slate-400">/ Max 12</span>
+          </div>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+          <span class="text-[11px] font-mono text-slate-400 block mb-1">MARITIME DISTRESS (SOS)</span>
+          <button onclick="triggerSOS()" class="mt-1 w-full bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/30 text-xs font-bold py-1.5 rounded transition">
+            BROADCAST SOS
+          </button>
+        </div>
+      </div>
+
+      <!-- Generated Vessel QR Plate -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col sm:flex-row items-center gap-5">
+        <div class="w-32 h-32 bg-white rounded-lg p-2 flex items-center justify-center border border-slate-700">
+          <!-- Static QR representation -->
+          <svg class="w-full h-full text-slate-900" viewBox="0 0 100 100" fill="currentColor">
+            <path d="M10 10h30v30H10zM15 15v20h20V15zm5 5h10v10H20zM60 10h30v30H60zM65 15v20h20V15zm5 5h10v10H70zM10 60h30v30H10zM15 65v20h20V65zm5 5h10v10H20zM55 55h10v10H55zm15 0h10v10H70zm15 0h10v10H85zm-30 15h10v10H55zm15 15h10v10H70zm15-15h10v20H85z"/>
+          </svg>
+        </div>
+        <div class="text-xs space-y-1">
+          <span class="text-[10px] font-mono text-teal-400 uppercase tracking-wider block">Official Vessel QR Badge</span>
+          <h4 class="text-sm font-bold text-white">KIV/ALP/SH/1029/2026 • Verified</h4>
+          <p class="text-slate-400">Print and display this QR plate on the boat gangway. Passengers scan this code to verify licensing, emergency equipment, and official tariffs.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Real Geolocation Implementation
+    let currentLat = 9.5008;
+    let currentLng = 76.3453;
+    const jetties = [
+      { name: "Alappuzha Main Terminal", lat: 9.5008, lng: 76.3453 },
+      { name: "Kuppapuram Waypoint", lat: 9.5100, lng: 76.3750 },
+      { name: "Kainakary Chira Station", lat: 9.5215, lng: 76.3892 },
+      { name: "Pulinkunnu Central Terminal", lat: 9.4981, lng: 76.4385 },
+      { name: "Nedumudi Terminal", lat: 9.4389, lng: 76.4021 },
+      { name: "Kottayam Kodimatha Terminal", lat: 9.5592, lng: 76.5061 }
+    ];
+
+    function calculateDistanceKm(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return (R * c).toFixed(2);
+    }
+
+    function initGeolocation() {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            currentLat = position.coords.latitude;
+            currentLng = position.coords.longitude;
+            document.getElementById('gps-dot').className = "w-2 h-2 rounded-full bg-emerald-400";
+            document.getElementById('gps-text').innerText = `GPS Active: ${currentLat.toFixed(4)}°N, ${currentLng.toFixed(4)}°E`;
+            updateNearestJetty();
+            updateMap(currentLat, currentLng);
+          },
+          (err) => {
+            document.getElementById('gps-dot').className = "w-2 h-2 rounded-full bg-sky-400";
+            document.getElementById('gps-text').innerText = `Fixed Sector Lock: Alappuzha (9.5008°N, 76.3453°E)`;
+            updateNearestJetty();
+            updateMap(currentLat, currentLng);
+          },
+          { enableHighAccuracy: true, timeout: 8000 }
+        );
+      } else {
+        updateNearestJetty();
+        updateMap(currentLat, currentLng);
+      }
+    }
+
+    function updateNearestJetty() {
+      let nearest = jetties[0];
+      let minDis = 99999;
+      jetties.forEach(j => {
+        let d = parseFloat(calculateDistanceKm(currentLat, currentLng, j.lat, j.lng));
+        if (d < minDis) {
+          minDis = d;
+          nearest = j;
+        }
+      });
+      document.getElementById('nearest-jetty').innerText = `${nearest.name} (${minDis} km)`;
+    }
+
+    // Leaflet Map Initialization
+    let map = null;
+    let userMarker = null;
+
+    function updateMap(lat, lng) {
+      if (!map) {
+        map = L.map('map').setView([lat, lng], 13);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+          maxZoom: 18,
+          attribution: '&copy; CartoDB & OSM'
+        }).addTo(map);
+
+        // Waterway Route Line
+        const routeCoords = jetties.map(j => [j.lat, j.lng]);
+        L.polyline(routeCoords, { color: '#0D9488', weight: 3, opacity: 0.8, dashArray: '5, 8' }).addTo(map);
+
+        jetties.forEach(j => {
+          L.circleMarker([j.lat, j.lng], {
+            radius: 5,
+            color: '#38BDF8',
+            fillColor: '#0284C7',
+            fillOpacity: 1
+          }).bindPopup(`<b style="color:black">${j.name}</b>`).addTo(map);
+        });
+
+        userMarker = L.circleMarker([lat, lng], {
+          radius: 8,
+          color: '#F59E0B',
+          fillColor: '#D97706',
+          fillOpacity: 1
+        }).bindPopup(`<b style="color:black">Current Location</b>`).addTo(map);
+      } else {
+        map.setView([lat, lng], 13);
+        if (userMarker) userMarker.setLatLng([lat, lng]);
+      }
+    }
+
+    // View Switching Logic
+    function switchView(view) {
+      const pubView = document.getElementById('view-public');
+      const ownView = document.getElementById('view-owner');
+      const btnPub = document.getElementById('btn-public');
+      const btnOwn = document.getElementById('btn-owner');
+
+      if (view === 'public') {
+        pubView.classList.remove('hidden');
+        ownView.classList.add('hidden');
+        btnPub.classList.add('active');
+        btnPub.classList.remove('text-slate-400', 'border-transparent');
+        btnOwn.classList.remove('active');
+        btnOwn.classList.add('text-slate-400', 'border-transparent');
+        setTimeout(() => { if (map) map.invalidateSize(); }, 100);
+      } else {
+        pubView.classList.add('hidden');
+        ownView.classList.remove('hidden');
+        btnOwn.classList.add('active');
+        btnOwn.classList.remove('text-slate-400', 'border-transparent');
+        btnPub.classList.remove('active');
+        btnPub.classList.add('text-slate-400', 'border-transparent');
+      }
+    }
+
+    function setOwnerTab(tab) {
+      const regSec = document.getElementById('owner-register-section');
+      const dashSec = document.getElementById('owner-dash-section');
+      const regBtn = document.getElementById('tab-register-btn');
+      const dashBtn = document.getElementById('tab-dash-btn');
+
+      if (tab === 'register') {
+        regSec.classList.remove('hidden');
+        dashSec.classList.add('hidden');
+        regBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-teal-600 text-white transition";
+        dashBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition";
+      } else {
+        regSec.classList.add('hidden');
+        dashSec.classList.remove('hidden');
+        dashBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-teal-600 text-white transition";
+        regBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition";
+      }
+    }
+
+    function previewImage(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('preview-img').src = e.target.result;
+          document.getElementById('image-preview').classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function handleRegistration(e) {
+      e.preventDefault();
+      alert("Registration submitted successfully under KIV regulatory framework. Transferred to Owner Cockpit.");
+      setOwnerTab('dashboard');
+    }
+
+    function simulateScan() {
+      const res = document.getElementById('scan-result');
+      res.classList.remove('hidden');
+    }
+
+    let passengers = 8;
+    function adjustPassengers(delta) {
+      passengers = Math.max(0, Math.min(12, passengers + delta));
+      document.getElementById('passenger-count').innerText = passengers < 10 ? '0' + passengers : passengers;
+    }
+
+    function toggleDuty(active) {
+      const onBtn = document.getElementById('duty-on');
+      const offBtn = document.getElementById('duty-off');
+      if (active) {
+        onBtn.className = "px-3 py-1 rounded bg-teal-600 text-white text-xs font-semibold";
+        offBtn.className = "px-3 py-1 rounded bg-slate-800 text-slate-400 text-xs font-medium";
+      } else {
+        offBtn.className = "px-3 py-1 rounded bg-amber-600 text-white text-xs font-semibold";
+        onBtn.className = "px-3 py-1 rounded bg-slate-800 text-slate-400 text-xs font-medium";
+      }
+    }
+
+    function triggerSOS() {
+      if (confirm("Broadcast Maritime Distress signal to Coastal Police and Disaster Management?")) {
+        alert("SOS Broadcast Active. Coordinates (" + currentLat + ", " + currentLng + ") dispatched with manifest of " + passengers + " souls.");
+      }
+    }
+
+    // Startup
+    window.addEventListener('load', () => {
+      initGeolocation();
+    });
+  </script>
+</body>
+</html>
