@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "ThoniNet",
+    "slug": "thoninet",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "android": {
+      "package": "org.keralawaterways.thoninet",
+      "adaptiveIcon": {
+        "backgroundColor": "#0B0F17"
+      },
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE"
+      ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6c688b46-80c8-4e8e-b210-28c7566c4df5"
+      }
+    }
+  }
+}

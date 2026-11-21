@@ -1,0 +1,58 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "network": "SWTD_KUTTANAD_INLAND_WATERWAYS",
+    "version": "1.0",
+    "region": "Alappuzha - Kottayam - Kuttanad"
+  },
+  "jetties": [
+    { "id": "ALP_MAIN", "name_en": "Alappuzha Main SWTD Jetty", "name_ml": "ആലപ്പുഴ മെയിൻ ബോട്ട് ജെട്ടി", "coords": [9.5008, 76.3453], "connections": ["KUPPAPURAM", "NEDUMUDI"] },
+    { "id": "KUPPAPURAM", "name_en": "Kuppapuram Jetty", "name_ml": "കുപ്പപ്പുറം ജെട്ടി", "coords": [9.5100, 76.3750], "connections": ["ALP_MAIN", "KAINAKARY"] },
+    { "id": "KAINAKARY", "name_en": "Kainakary Chira Jetty", "name_ml": "കൈനകരി ചിറ ജെട്ടി", "coords": [9.5215, 76.3892], "connections": ["KUPPAPURAM", "R_BLOCK", "NEDUMUDI"] },
+    { "id": "R_BLOCK", "name_en": "R-Block / Chithira Kayal", "name_ml": "ആർ-ബ്ലോക്ക് / ചിത്തിര കായൽ", "coords": [9.5333, 76.4250], "connections": ["KAINAKARY", "PULINKUNNU"] },
+    { "id": "PULINKUNNU", "name_en": "Pulinkunnu Central Jetty", "name_ml": "പുളിങ്കുന്ന് ജെട്ടി", "coords": [9.4981, 76.4385], "connections": ["R_BLOCK", "CHAMPAKKULAM", "KANJIRAM"] },
+    { "id": "CHAMPAKKULAM", "name_en": "Champakkulam Market Jetty", "name_ml": "ചമ്പക്കുളം അങ്ങാടി ജെട്ടി", "coords": [9.4120, 76.4250], "connections": ["PULINKUNNU", "NEDUMUDI"] },
+    { "id": "NEDUMUDI", "name_en": "Nedumudi Bridge Jetty", "name_ml": "നെടുമുടി ജെട്ടി", "coords": [9.4389, 76.4021], "connections": ["CHAMPAKKULAM", "ALP_MAIN"] },
+    { "id": "KANJIRAM", "name_en": "Kanjiram / Thiruvarppu", "name_ml": "കാഞ്ഞിരം ജെട്ടി", "coords": [9.5520, 76.4850], "connections": ["PULINKUNNU", "KODIMATHA"] },
+    { "id": "KODIMATHA", "name_en": "Kottayam Kodimatha Terminal", "name_ml": "കോട്ടയം കോടിമത ടെർമിനൽ", "coords": [9.5592, 76.5061], "connections": ["KANJIRAM"] }
+  ],
+  "routes": [
+    {
+      "route_id": "SWTD_01",
+      "route_name_en": "Alappuzha - Kottayam Express",
+      "route_name_ml": "ആലപ്പുഴ - കോട്ടയം എക്സ്പ്രസ്സ്",
+      "stops": ["ALP_MAIN", "KUPPAPURAM", "KAINAKARY", "R_BLOCK", "PULINKUNNU", "KANJIRAM", "KODIMATHA"],
+      "typical_duration_mins": 150,
+      "schedule": ["07:30", "09:30", "11:30", "14:15", "16:45"]
+    },
+    {
+      "route_id": "SWTD_02",
+      "route_name_en": "Alappuzha - Nedumudi Circular",
+      "route_name_ml": "ആലപ്പുഴ - നെടുമുടി സർക്കുലർ",
+      "stops": ["ALP_MAIN", "KUPPAPURAM", "KAINAKARY", "PULINKUNNU", "CHAMPAKKULAM", "NEDUMUDI", "ALP_MAIN"],
+      "typical_duration_mins": 90,
+      "schedule": ["06:45", "08:15", "10:00", "12:30", "15:00", "17:30", "19:00"]
+    }
+  ],
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Alappuzha-Kottayam Main Water Highway", "waterway": "canal" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [76.3453, 9.5008],
+          [76.3600, 9.5050],
+          [76.3750, 9.5100],
+          [76.3892, 9.5215],
+          [76.4050, 9.5280],
+          [76.4250, 9.5333],
+          [76.4385, 9.4981],
+          [76.4600, 9.5200],
+          [76.4850, 9.5520],
+          [76.5061, 9.5592]
+        ]
+      }
+    }
+  ]
+}
