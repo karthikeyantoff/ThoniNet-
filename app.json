@@ -21,8 +21,8 @@
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
         "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "RECORD_AUDIO"
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE"
       ]
     },
     "plugins": [
@@ -36,18 +36,6 @@
         "expo-image-picker",
         {
           "photosPermission": "Allow ThoniNet to access photos to upload vessel inspection certificates."
-        }
-      ],
-      [
-        "expo-camera",
-        {
-          "cameraPermission": "Allow ThoniNet to access camera to scan and verify physical KIV boat QR codes."
-        }
-      ],
-      [
-        "expo-av",
-        {
-          "microphonePermission": "Allow ThoniNet to access microphone to process Malayalam Sarvam AI voice commands."
         }
       ]
     ],
