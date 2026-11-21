@@ -6,7 +6,6 @@
 // 2. Cultural Polder Geofence Audio Story Engine (Sarvam AI)
 // 3. Offline Ultrasonic & BLE Mesh SOS Relay
 // 4. Crowdsourced Water Hyacinth ("Payal") Hazard Tracker
-// 5. Statutory Bluetooth Thermal Manifest Print Generator
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -34,7 +33,6 @@ import PolderGeofenceService, { HERITAGE_POLDERS } from './src/services/PolderGe
 import HydroSonarService, { CANAL_WATER_SEGMENTS } from './src/services/HydroSonarService';
 import CanalHazardService, { HAZARD_TYPES } from './src/services/CanalHazardService';
 import MeshSosService from './src/services/MeshSosService';
-import ThermalPrinterService from './src/services/ThermalPrinterService';
 
 const JETTIES = [
   { id: "ALP", name: "Alappuzha Main SWTD Terminal", nameMl: "ആലപ്പുഴ മെയിൻ ടെർമിനൽ", lat: 9.5008, lng: 76.3453 },
@@ -75,7 +73,6 @@ export default function App() {
 
   // Innovation 4: Mesh SOS & Thermal Manifest
   const [meshBroadcastStatus, setMeshBroadcastStatus] = useState(null);
-  const [thermalReceiptModal, setThermalReceiptModal] = useState(null);
 
   // Real Audio State (Sarvam AI)
   const [isAudioRecording, setIsAudioRecording] = useState(false);
@@ -302,9 +299,6 @@ export default function App() {
   };
 
   // Print Thermal Manifest
-  const handlePrintManifest = () => {
-    const receipt = ThermalPrinterService.generateEscPosManifest(verifiedVessel, activePassengers);
-    setThermalReceiptModal(receipt);
   };
 
   // Distress SOS via Mesh
@@ -943,7 +937,6 @@ export default function App() {
                   {/* Print Thermal Receipt Button */}
                   <TouchableOpacity
                     style={styles.thermalPrintBtn}
-                    onPress={handlePrintManifest}
                     activeOpacity={0.8}
                   >
                     <Feather name="printer" size={14} color="#0F172A" style={{ marginRight: 6 }} />
@@ -1281,43 +1274,6 @@ export default function App() {
         </View>
       </Modal>
 
-      {/* Bluetooth Thermal Manifest Receipt Modal */}
-      {thermalReceiptModal && (
-        <Modal visible={!!thermalReceiptModal} transparent animationType="fade">
-          <View style={styles.modalBackdrop}>
-            <View style={styles.modalCard}>
-              <View style={styles.modalHeaderRow}>
-                <View style={styles.modalStatusBadge}>
-                  <Feather name="printer" size={14} color="#0D9488" style={{ marginRight: 6 }} />
-                  <Text style={styles.modalStatusText}>ESC/POS 58mm Formatted</Text>
-                </View>
-                <TouchableOpacity onPress={() => setThermalReceiptModal(null)} style={{ padding: 4 }}>
-                  <Feather name="x" size={18} color="#64748B" />
-                </TouchableOpacity>
-              </View>
-
-              <Text style={styles.modalVesselName}>Statutory Manifest Chit</Text>
-              <Text style={styles.modalKivCode}>{thermalReceiptModal.printer}</Text>
-
-              <View style={styles.receiptPaperBox}>
-                <Text style={styles.receiptPaperText}>{thermalReceiptModal.manifestRaw}</Text>
-              </View>
-
-              <TouchableOpacity
-                style={styles.modalConfirmBtn}
-                onPress={() => {
-                  setThermalReceiptModal(null);
-                  Alert.alert("Print Job Dispatched", "Manifest transmitted to Bluetooth Thermal ESC/POS Printer.");
-                }}
-                activeOpacity={0.85}
-              >
-                <Text style={styles.modalConfirmBtnText}>Transmit to Printer</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-      )}
-
       {/* User Auth Modal */}
       <Modal visible={showAuthModal} transparent animationType="fade">
         <View style={styles.modalBackdrop}>
@@ -1330,7 +1286,7 @@ export default function App() {
             </View>
 
             <Text style={styles.modalSub}>
-              Signed in as Guest Traveler. Your tickets and voice queries are stored offline on this device.
+              Signed in as Guest Traveler. Your transit activity and voice queries are stored locally on this device.
             </Text>
 
             <View style={styles.modalDivider} />
