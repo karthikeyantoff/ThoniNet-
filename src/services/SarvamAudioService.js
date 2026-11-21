@@ -102,13 +102,13 @@ class SarvamAudioService {
         body: JSON.stringify({
           inputs: [text],
           target_language_code: "ml-IN",
-          speaker: "meera",
+          speaker: "gokul",
           pitch: 0,
           pace: 0.95,
           loudness: 1.2,
           speech_sample_rate: 22050,
           enable_preprocessing: true,
-          model: "bulbul:v1"
+          model: "bulbul:v3"
         })
       });
 
